@@ -1,4 +1,11 @@
 <script>
+    import router from 'page'
+    import { persist, localStorage } from "@macfja/svelte-persistent-store"
+    import { writable } from "svelte/store"
+
+    let authToken = persist(writable('token'), localStorage(), 'token')
+
+
     let files;
     var changed = false;
     var filename = '';
@@ -44,11 +51,12 @@
                 return response.json().then(response => {throw new Error(response.message)})
             }).then(function(response){
                 if(response.success){
-                    //token
+                    $authToken = response.token
+                    router.redirect('/me');
                 }
             }).catch((err) => {
                 errormessage = err
-            });;
+            });
 	}
 </script>
 
