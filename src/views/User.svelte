@@ -4,23 +4,24 @@
     import { persist, localStorage } from "@macfja/svelte-persistent-store"
     import { writable } from "svelte/store"
     import moment from 'moment';
-    
+
     let authToken = persist(writable('token'), localStorage(), 'token')
-    console.log($authToken);
+    // sconsole.log($authToken);
     const myHeaders = new Headers();
 
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append('Authorization', 'Bearer ' + $authToken);
 
+    export let params;
+
     let avatar = '';
     let fullname = 'Nombre';
     let username = '-----';
     let email = '-----@-----.---';
-    let images = [];
 
-
+    var images = [];
     const getUsername = () => {
-        const dataUrl = `http://localhost/api/v1/users/`+username;
+        const dataUrl = `http://localhost/api/v1/users/`+params.user_name;
 
         fetch(dataUrl, {
             method: "GET",
@@ -30,36 +31,18 @@
             return response.json().then(response => {throw new Error(response.message)})
         }).then(function(response){
             if(response.success){
-                images = response.data.images;
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
-    };
-
-	const dataUrl = `http://localhost/api/v1/auth/me`;
-
-    fetch(dataUrl, {
-        method: "GET",
-        headers: myHeaders,
-        }).then((response) => {
-            if (response.status == 403) {
-                router.redirect('/login');
-            }
-            if (response.ok) return response.json();
-            return response.json().then(response => {throw new Error(response.message)})
-        }).then(function(response){
-            if(response.success){
                 console.log(response);
                 avatar = response.data.avatar;
                 fullname = response.data.fullname;
                 username = response.data.username;
-                email = response.data.email;
-                getUsername();
+                images = response.data.images;
             }
         }).catch((err) => {
-            console.log(err);
+            errormessage = err
         });
+    };
+
+    getUsername();
 	
 </script>
 

@@ -22,7 +22,7 @@
 
         let data = new FormData();
         data.append('file1', files[0]);
-        fetch('http://localhost:5000/api/v1/principal/upload', {
+        fetch('http://localhost/api/v1/principal/upload', {
             method: 'POST',
             credentials: 'same-origin',
             body: data
@@ -39,7 +39,7 @@
     function handleClick(event) {
 		event.preventDefault()
         var formAEnviar = JSON.stringify(datos);
-        fetch("http://localhost:5000/api/v1/auth/signup", {
+        fetch("http://localhost/api/v1/auth/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -126,8 +126,8 @@
                         <span>{filename}</span>
                         {:else}
                             <span>Upload a file</span>
+                            <input id="file1" name="file1" type="file" class="sr-only" accept="image/png, image/jpeg" bind:files>
                         {/if}
-                        <input id="file1" name="file1" type="file" class="sr-only" accept="image/png, image/jpeg" bind:files>
                       </label>
                     </div>
                   </div>

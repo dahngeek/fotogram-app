@@ -15,7 +15,7 @@
   function handleClick(event) {
   event.preventDefault()
       var formAEnviar = JSON.stringify(datos);
-      fetch("http://localhost:5000/api/v1/auth/login", {
+      fetch("http://localhost/api/v1/auth/login", {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
