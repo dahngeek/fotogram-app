@@ -22,7 +22,7 @@
 
         let data = new FormData();
         data.append('file1', files[0]);
-        fetch('http://localhost/api/v1/principal/upload', {
+        fetch('/api/v1/principal/upload', {
             method: 'POST',
             credentials: 'same-origin',
             body: data
@@ -39,7 +39,7 @@
     function handleClick(event) {
 		event.preventDefault()
         var formAEnviar = JSON.stringify(datos);
-        fetch("http://localhost/api/v1/auth/signup", {
+        fetch("/api/v1/auth/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

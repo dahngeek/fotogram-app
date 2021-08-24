@@ -21,7 +21,7 @@
 
     var images = [];
     const getUsername = () => {
-        const dataUrl = `http://localhost/api/v1/users/`+params.user_name;
+        const dataUrl = `/api/v1/users/`+params.user_name;
 
         fetch(dataUrl, {
             method: "GET",

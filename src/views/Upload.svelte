@@ -25,7 +25,7 @@ import Header from '../components/Header.svelte';
         data.append('file1', files[0]);
         uploading = true;
         if(!uploaded){
-            fetch('http://localhost/api/v1/principal/upload', {
+            fetch('/api/v1/principal/upload', {
                 method: 'POST',
                 credentials: 'same-origin',
                 body: data
@@ -53,7 +53,7 @@ import Header from '../components/Header.svelte';
         datos.tags = datos.tags.split(',');
         var formAEnviar = JSON.stringify(datos);
         publicando = true;
-        fetch("http://localhost/api/v1/principal/", {
+        fetch("/api/v1/principal/", {
             method: "POST",
             headers: myHeaders,
             body: formAEnviar

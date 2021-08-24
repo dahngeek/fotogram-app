@@ -20,7 +20,7 @@
     var prevURL = '';
     var moreURL = '';
 
-	const dataUrl = `http://localhost/api/v1/principal`;
+	const dataUrl = `/api/v1/principal`;
 
     function getPictures(serviceurl) {
         loading = true;

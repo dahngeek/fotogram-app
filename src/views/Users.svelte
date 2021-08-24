@@ -14,7 +14,7 @@
     var users = [];
     var loading = false;
 
-	const dataUrl = `http://localhost/api/v1/users`;
+	const dataUrl = `/api/v1/users`;
 
     function getPictures(serviceurl) {
         loading = true;

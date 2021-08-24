@@ -20,7 +20,7 @@
 
 
     const getUsername = () => {
-        const dataUrl = `http://localhost/api/v1/users/`+username;
+        const dataUrl = `/api/v1/users/`+username;
 
         fetch(dataUrl, {
             method: "GET",
@@ -37,7 +37,7 @@
         });
     };
 
-	const dataUrl = `http://localhost/api/v1/auth/me`;
+	const dataUrl = `/api/v1/auth/me`;
 
     fetch(dataUrl, {
         method: "GET",
