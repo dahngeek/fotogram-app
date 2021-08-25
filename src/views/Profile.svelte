@@ -37,30 +37,51 @@
         });
     };
 
-	const dataUrl = `/api/v1/auth/me`;
+    const getMe = () => {
+      const dataUrl = `/api/v1/auth/me`;
 
-    fetch(dataUrl, {
-        method: "GET",
-        headers: myHeaders,
+      fetch(dataUrl, {
+          method: "GET",
+          headers: myHeaders,
+          }).then((response) => {
+              if (response.status == 403) {
+                  router.redirect('/login');
+              }
+              if (response.ok) return response.json();
+              return response.json().then(response => {throw new Error(response.message)})
+          }).then(function(response){
+              if(response.success){
+                  console.log(response);
+                  avatar = response.data.avatar;
+                  fullname = response.data.fullname;
+                  username = response.data.username;
+                  email = response.data.email;
+                  getUsername();
+              }
+          }).catch((err) => {
+              console.log(err);
+          });
+    }
+    getMe();
+
+    const deleteImage = (image) => {
+        const dataUrl = `/api/v1/principal/`+image;
+
+        fetch(dataUrl, {
+            method: "DELETE",
+            headers: myHeaders,
         }).then((response) => {
-            if (response.status == 403) {
-                router.redirect('/login');
-            }
             if (response.ok) return response.json();
             return response.json().then(response => {throw new Error(response.message)})
         }).then(function(response){
             if(response.success){
-                console.log(response);
-                avatar = response.data.avatar;
-                fullname = response.data.fullname;
-                username = response.data.username;
-                email = response.data.email;
-                getUsername();
+              location.reload();
+              return false;
             }
         }).catch((err) => {
             console.log(err);
         });
-	
+    };
 </script>
 
 <main>
@@ -106,16 +127,19 @@
           </div>
         </div>
       </div>
-    <div class="bg-gray-100 min-h-screen py-32 px-10 ">
+    <div class="bg-gray-100 py-32 px-10 ">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-x-10 xl-grid-cols-4 gap-y-10 gap-x-6 "> 
       
-        {#each images as { tags, files, caption, user, createdAt }, i}
+        {#each images as { _id, tags, files, caption, user, createdAt }, i}
             <div class="container mx-auto shadow-lg rounded-lg max-w-md hover:shadow-2xl transition duration-300">
                 <img src="{files[0]}" alt="" class="rounded-t-lg w-full">
                 <div class="p-6">
                 <h1 class="md:text-1xl text-xl hover:text-indigo-600 transition duration-200  font-bold text-gray-900 ">{caption}</h1>
                 <p class="text-gray-700 my-2 hover-text-900 ">{tags.join(', ')}</p>
                 <p class="text-gray-500 my-2 hover-text-900 ">{moment(createdAt).locale('es').calendar()}</p>
+                <button on:click={() => deleteImage(_id)} type="button" class="group mb-5 relative w-50 flex mx-auto justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Eliminar
+                </button>
                 </div>
             </div>
 	    {/each}

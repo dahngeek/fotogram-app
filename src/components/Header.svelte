@@ -58,7 +58,6 @@ const dataUrl = `/api/v1/auth/me`;
             Subir una Foto
           </a>
         </div>
-        {#if $authToken!=='token'}
         <nav class="md:flex space-x-10">
   
           <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">
@@ -84,7 +83,6 @@ const dataUrl = `/api/v1/auth/me`;
             </div>
           </a>
         </div>
-        {/if}
       </div>
     </div>
   
