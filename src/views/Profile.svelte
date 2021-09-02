@@ -89,7 +89,7 @@
         <div class="h-56 w-72 absolute flex justify-center items-center">
           <img
             class="object-cover h-20 w-20 rounded-full"
-            src="{avatar}"
+            src="{avatar.substring(0, avatar.indexOf("?"))}"
             alt=""
           />
         </div>
@@ -132,7 +132,7 @@
       
         {#each images as { _id, tags, files, caption, user, createdAt }, i}
             <div class="container mx-auto shadow-lg rounded-lg max-w-md hover:shadow-2xl transition duration-300">
-                <img src="{files[0]}" alt="" class="rounded-t-lg w-full">
+                <img src="{files[0].substring(0, files[0].indexOf("?"))}" alt="" class="rounded-t-lg w-full">
                 <div class="p-6">
                 <h1 class="md:text-1xl text-xl hover:text-indigo-600 transition duration-200  font-bold text-gray-900 ">{caption}</h1>
                 <p class="text-gray-700 my-2 hover-text-900 ">{tags.join(', ')}</p>

@@ -77,7 +77,7 @@ const dataUrl = `/api/v1/auth/me`;
           <a href="/me" class="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
             <div class="flex">
                 <div class="rounded-full h-8 w-8 bg-gray-500 flex items-center justify-center overflow-hidden">
-                    <img src="{avatar}" alt="profilepic">
+                    <img src="{avatar.substring(0, avatar.indexOf("?"))}" alt="profilepic">
                 </div>
                 <span class="pt-1 ml-2 font-bold text-sm">{username}</span>
             </div>

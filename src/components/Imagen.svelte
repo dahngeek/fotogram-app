@@ -4,6 +4,10 @@
   export let caption;
   export let files;
   export let tags;
+
+  var clean_avatar = user.avatar.substring(0, user.avatar.indexOf("?"));
+  var clean_image = files[0].substring(0, files[0].indexOf("?"));
+
   import moment from 'moment';
 </script>
 <main>
@@ -12,14 +16,14 @@
           <a href="/user/{user.username}">
             <div class="flex">
               <div class="rounded-full h-8 w-8 bg-gray-500 flex items-center justify-center overflow-hidden">
-                <img src="{user.avatar}" alt="profilepic">
+                <img src="{clean_avatar}" alt="profilepic">
               </div>
               <span class="pt-1 ml-2 font-bold text-sm">{user.username}</span>
             </div>
           </a>
           <span class="px-2 cursor-pointer rounded"><span class="text-gray-400">{moment(createdAt).locale('es').calendar()}</span></span>
         </div>
-        <img class="w-full bg-cover" src="{files[0]}">
+        <img class="w-full bg-cover" src="{clean_image}">
         <div class="px-3 pb-2">
           <div class="pt-2">
             <i class="far fa-heart cursor-pointer"></i>

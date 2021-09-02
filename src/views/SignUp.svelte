@@ -2,6 +2,7 @@
     import router from 'page'
     import { persist, localStorage } from "@macfja/svelte-persistent-store"
     import { writable } from "svelte/store"
+    import ImageTools from '../ImageTools'
 
     let authToken = persist(writable('token'), localStorage(), 'token')
 
@@ -20,19 +21,31 @@
         console.log(files);
         filename = files[0].name;
 
-        let data = new FormData();
-        data.append('file1', files[0]);
-        fetch('/api/v1/principal/upload', {
-            method: 'POST',
-            credentials: 'same-origin',
-            body: data
-        }).then(function(res){
-            return res.json();
-        }).then(function(response){
-            if(response.success){
-                changed = true;
-                datos.avatar = response.data.url
-            }
+        ImageTools.resize(files[0], {
+        width: 800, // maximum width
+        height: 800 // maximum height
+        }, function(blob, didItResize) {
+            // didItResize will be true if it managed to resize it, otherwise false (and will return the original file as 'blob')
+            // document.getElementById('preview').src = window.URL.createObjectURL(blob);
+            // you can also now upload this blob using an XHR.
+            const filesend = new File([blob], filename, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    });
+            let data = new FormData();
+            data.append('file1', filesend);
+            fetch('/api/v1/principal/upload', {
+                method: 'POST',
+                credentials: 'same-origin',
+                body: data
+            }).then(function(res){
+                return res.json();
+            }).then(function(response){
+                if(response.success){
+                    changed = true;
+                    datos.avatar = response.data.url
+                }
+            });
         });
     }
 

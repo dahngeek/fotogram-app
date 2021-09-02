@@ -53,7 +53,7 @@
                 <div class="flex items-center justify-between my-4">
                     <div class="w-16">
                     <a href="/user/{username}">
-                        <img class="w-12 h-12 rounded-full" src="{avatar}">
+                        <img class="object-cover w-12 h-12 rounded-full" src="{avatar.substring(0, avatar.indexOf("?"))}">
                     </a>
                     </div>
                     <div class="flex-1 pl-2">

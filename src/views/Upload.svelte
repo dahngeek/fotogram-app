@@ -1,5 +1,6 @@
 <script>
     import router from 'page'
+    import ImageTools from '../ImageTools'
     import { persist, localStorage } from "@macfja/svelte-persistent-store"
     import { writable } from "svelte/store"
 import Header from '../components/Header.svelte';
@@ -21,26 +22,38 @@ import Header from '../components/Header.svelte';
         console.log(files);
         filename = files[0].name;
 
-        let data = new FormData();
-        data.append('file1', files[0]);
-        uploading = true;
-        if(!uploaded){
-            fetch('/api/v1/principal/upload', {
-                method: 'POST',
-                credentials: 'same-origin',
-                body: data
-            }).then(function(res){
-                if (res.status == 403) {
-                    router.redirect('/login');
-                }
-                return res.json();
-            }).then(function(response){
-                if(response.success){
-                    uploaded = true;
-                    datos.files = [response.data.url]
-                }
-            });
-        }
+        ImageTools.resize(files[0], {
+        width: 1000, // maximum width
+        height: 1000 // maximum height
+        }, function(blob, didItResize) {
+            // didItResize will be true if it managed to resize it, otherwise false (and will return the original file as 'blob')
+            // document.getElementById('preview').src = window.URL.createObjectURL(blob);
+            // you can also now upload this blob using an XHR.
+            const filesend = new File([blob], filename, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    });
+            let data = new FormData();
+            data.append('file1', filesend);
+            uploading = true;
+            if(!uploaded){
+                fetch('/api/v1/principal/upload', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    body: data
+                }).then(function(res){
+                    if (res.status == 403) {
+                        router.redirect('/login');
+                    }
+                    return res.json();
+                }).then(function(response){
+                    if(response.success){
+                        uploaded = true;
+                        datos.files = [response.data.url]
+                    }
+                });
+            }
+        });
     }
 
     const myHeaders = new Headers();
@@ -131,13 +144,20 @@ import Header from '../components/Header.svelte';
                     </div>
                     <div class="grid grid-cols-1 space-y-2">
                         <label class="text-sm font-bold text-gray-500 tracking-wide">Menú:</label>
-                            <input bind:value={datos.tags} class="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="text" placeholder="Ej. Empanadas, Ensalada, etc.">
+                            <input bind:value={datos.tags} class="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="text" placeholder="Ej. Empanadas de choclo, ensalada de repollo y tomate, etc.">
                     </div>
                     <div>
+                        {#if uploaded}
                         <button type="submit" on:click={handleClick} class="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
-                                    font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
-                        Publicar
-                    </button>
+                        font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
+                            Publicar
+                        </button>
+                        {:else}
+                        <button type="button" disabled class="my-5 w-full flex justify-center bg-gray-500 text-blue-100 p-4  rounded-full tracking-wide
+                        font-semibold  focus:outline-none focus:shadow-outline shadow-lg cursor-pointer transition ease-in duration-300">
+                            Publicar
+                        </button>
+                        {/if}
                     </div>
         </form>
         {:else}
