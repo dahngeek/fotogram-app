@@ -12,7 +12,7 @@
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append('Authorization', 'Bearer ' + $authToken);
 
-    var images = [];
+    let images = [];
     var pagina = 0;
     var showMore = false;
     var showPrev = false;
@@ -36,8 +36,12 @@
         }).then(function(response){
             if(response.success){
                 loading = false;
-                images = response.data;
-
+                let images2 = response.data;
+                images2.forEach((element, index) => {
+                    images2[index].user.avatar = element.user.avatar.substring(0, element.user.avatar.indexOf("?"));
+                    images2[index].files[0] = element.files[0].substring(0, element.files[0].indexOf("?"))
+                });
+                images = images.concat(images2);
                 function hasMorePages(link) {
                     return link.rel === 'next';
                 }
@@ -72,12 +76,10 @@
     getPictures(dataUrl);
 
     function prevPage(event) {
-        event.preventDefault();
         getPictures(prevURL);
     }
 
     function nextPage(event) {
-        event.preventDefault();
         getPictures(moreURL);
     }
 </script>
@@ -93,14 +95,14 @@
             <div class="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
         </div>
         {/if}
-        {#if showPrev}
+        {#if false}
             <button on:click={prevPage} type="button" class="group mb-5 relative w-50 flex mx-auto justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Anterior
             </button>
         {/if}
         {#if showMore}
             <button on:click={nextPage} type="button" class="group mb-5 relative w-50 flex mx-auto justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Siguiente
+                Más
             </button>
         {/if}
     </div>
